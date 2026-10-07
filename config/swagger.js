@@ -118,6 +118,70 @@ Click the **Authorize** button above and paste your token in the format:
         },
       },
     },
+    '/api/auth/send-otp': {
+      post: {
+        tags: ['Authentication'],
+        summary: 'Send 6-digit OTP verification code to email',
+        description: 'Generates a secure 6-digit code with 10-minute validity and emails it via Gmail SMTP.',
+        operationId: 'sendSignupOtp',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              example: {
+                name: 'Raju Arraboina',
+                email: 'rajuarraboina58@gmail.com',
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'OTP dispatched successfully',
+            content: {
+              'application/json': {
+                example: {
+                  success: true,
+                  message: 'A 6-digit verification code has been sent to rajuarraboina58@gmail.com',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/auth/verify-otp': {
+      post: {
+        tags: ['Authentication'],
+        summary: 'Verify 6-digit OTP code',
+        description: 'Validates entered 6-digit verification code against the stored active OTP record.',
+        operationId: 'verifySignupOtp',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              example: {
+                email: 'rajuarraboina58@gmail.com',
+                otp: '123456',
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'OTP verified successfully',
+            content: {
+              'application/json': {
+                example: {
+                  success: true,
+                  message: 'Verification code verified successfully!',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/api/auth/login': {
       post: {
         tags: ['Authentication'],

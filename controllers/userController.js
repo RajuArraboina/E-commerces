@@ -48,8 +48,9 @@ const updateUserProfile = async (req, res, next) => {
     if (req.body.name) user.name = req.body.name;
     if (req.body.phone !== undefined) user.phone = req.body.phone;
     if (req.body.address) {
+      const existingAddress = user.address && typeof user.address.toObject === 'function' ? user.address.toObject() : (user.address || {});
       user.address = {
-        ...user.address.toObject(),
+        ...existingAddress,
         ...req.body.address,
       };
     }

@@ -188,6 +188,7 @@ async function runTests() {
       price: 14999,
       category: testCategoryId,
       brand: 'AcousticPro',
+      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
       rating: 4.8,
       specifications: [
         { name: 'Driver', value: '40mm Neodymium' },
@@ -383,6 +384,18 @@ async function runTests() {
     variantStockAfterCancel === 8 && parentStockAfterCancel === 20,
     `Restored Variant stock: ${variantStockAfterCancel}, Parent stock: ${parentStockAfterCancel}`
   );
+
+  // Cleanup test product and category so tests do not pollute customer catalog
+  if (testProductId && adminToken) {
+    try {
+      await apiRequest('DELETE', `/api/products/${testProductId}`, null, adminToken);
+    } catch (_) {}
+  }
+  if (testCategoryId && adminToken) {
+    try {
+      await apiRequest('DELETE', `/api/categories/${testCategoryId}`, null, adminToken);
+    } catch (_) {}
+  }
 
   // Summary
   console.log(`\n${colors.bold}${colors.cyan}====================================================${colors.reset}`);

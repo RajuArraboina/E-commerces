@@ -1,6 +1,7 @@
 const Order = require('../models/orderModel');
 const Cart = require('../models/cartModel');
 const Product = require('../models/productModel');
+const { sendOrderConfirmationEmail } = require('../utils/sendEmail');
 
 /**
  * @desc    Create a new order from current cart (or provided items)
@@ -206,6 +207,11 @@ const createOrder = async (req, res, next) => {
     await Cart.findOneAndUpdate(
       { user: req.user._id },
       { $set: { items: [] } }
+    );
+
+    // 7. Dispatch Order Confirmation Email asynchronously
+    sendOrderConfirmationEmail(order, req.user).catch((err) =>
+      console.error('⚠️ Order confirmation email dispatch error:', err.message)
     );
 
     res.status(201).json({
