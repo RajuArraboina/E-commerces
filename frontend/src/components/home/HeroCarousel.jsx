@@ -25,9 +25,8 @@ const FALLBACK_SLIDES = [
     discount: 'Up to 45% OFF',
     code: 'AIFEST45',
     link: '/products?category=Laptops',
-    bgGradient: 'linear-gradient(135deg, #090d16 0%, #151632 50%, #201a4e 100%)',
+    bgGradient: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%)',
     image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-shopping-online-with-a-credit-card-and-laptop-42966-large.mp4',
   },
   {
     id: 'flagship-mobiles',
@@ -38,9 +37,8 @@ const FALLBACK_SLIDES = [
     discount: 'Flat ₹4,000 OFF',
     code: 'PHONEAI',
     link: '/products?category=Smartphones',
-    bgGradient: 'linear-gradient(135deg, #070f1e 0%, #0c1c38 50%, #162a56 100%)',
+    bgGradient: 'linear-gradient(135deg, #0c1a30 0%, #1e3a8a 50%, #0284c7 100%)',
     image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=900',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-smartphone-with-a-green-screen-41223-large.mp4',
   },
   {
     id: 'studio-audio',
@@ -51,9 +49,8 @@ const FALLBACK_SLIDES = [
     discount: 'Flat 40% OFF',
     code: 'SOUND40',
     link: '/products?category=Audio',
-    bgGradient: 'linear-gradient(135deg, #130a21 0%, #251341 50%, #3d1b66 100%)',
+    bgGradient: 'linear-gradient(135deg, #2e1065 0%, #581c87 50%, #7e22ce 100%)',
     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-young-woman-unpacking-a-box-bought-online-42866-large.mp4',
   },
   {
     id: 'smart-wearables',
@@ -64,9 +61,8 @@ const FALLBACK_SLIDES = [
     discount: 'Flat 20% OFF',
     code: 'AIACCESS20',
     link: '/products?category=Accessories',
-    bgGradient: 'linear-gradient(135deg, #031e1e 0%, #06393b 50%, #0e5b56 100%)',
+    bgGradient: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)',
     image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-shopping-online-with-a-credit-card-and-laptop-42966-large.mp4',
   },
 ];
 
@@ -185,8 +181,6 @@ const HeroCarousel = () => {
               className={`hero-slide-item ${isActive ? 'active' : ''}`}
               style={{
                 background: slide.bgGradient,
-                opacity: isActive ? 1 : 0,
-                pointerEvents: isActive ? 'auto' : 'none',
               }}
             >
               {/* Media Backdrop (Video & Image Overlay) */}
