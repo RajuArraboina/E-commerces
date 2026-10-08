@@ -101,6 +101,42 @@ const ProductCard = ({ product, onQuickView }) => {
     }
   };
 
+  const handleBuyNow = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      navigate('/login?redirect=/checkout');
+      return;
+    }
+
+    if (!inStock) return;
+
+    try {
+      setAdding(true);
+      await addToCart(_id, selectedVariant?._id || null, 1);
+      navigate('/checkout');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to proceed to checkout');
+    } finally {
+      setAdding(false);
+    }
+  };
+
+  // Determine dynamic badge
+  const getDynamicBadge = () => {
+    if (product.badge) return product.badge;
+    if (stock > 0 && stock <= 8) return 'LIMITED STOCK';
+    if (rating >= 4.7 && numReviews >= 20) return 'BEST SELLER';
+    if (product.createdAt && Date.now() - new Date(product.createdAt).getTime() < 14 * 24 * 60 * 60 * 1000) {
+      return 'NEW';
+    }
+    if (rating >= 4.5) return 'TRENDING';
+    return null;
+  };
+
+  const dynamicBadge = getDynamicBadge();
+
   return (
     <div className="product-card card">
       <Link to={`/products/${_id}`} className="product-card-link">
@@ -117,10 +153,17 @@ const ProductCard = ({ product, onQuickView }) => {
             }}
           />
 
-          {/* Discount Badge on Image */}
-          {discountPercent > 0 && inStock && (
-            <span className="product-card-discount-badge">{discountPercent}% OFF</span>
-          )}
+          {/* Badges on Image */}
+          <div className="card-floating-badges">
+            {dynamicBadge && (
+              <span className={`product-status-badge badge-${dynamicBadge.toLowerCase().replace(/\s+/g, '-')}`}>
+                {dynamicBadge}
+              </span>
+            )}
+            {discountPercent > 0 && inStock && (
+              <span className="product-card-discount-badge">{discountPercent}% OFF</span>
+            )}
+          </div>
 
           {!inStock && <span className="badge-out-of-stock">Out of Stock</span>}
 
@@ -167,14 +210,18 @@ const ProductCard = ({ product, onQuickView }) => {
             </div>
             <span className="stock-info">
               {inStock ? (
-                <span className="text-success">In Stock ({stock})</span>
+                stock <= 8 ? (
+                  <span className="text-warning-bold">Only {stock} left</span>
+                ) : (
+                  <span className="text-success">In Stock</span>
+                )
               ) : (
                 <span className="text-danger">Sold Out</span>
               )}
             </span>
           </div>
 
-          {/* Color Variant Swatches (Different Colors) */}
+          {/* Color Variant Swatches */}
           {variants && variants.length > 1 && variants.some((v) => v.color) && (
             <div className="product-color-options">
               <div className="color-swatches-row">
@@ -207,31 +254,44 @@ const ProductCard = ({ product, onQuickView }) => {
             </div>
           )}
 
-          {/* Price with Original Price & Add to Cart Action */}
+          {/* Price with Original Price */}
           <div className="product-price-row">
             <div className="product-price-stack">
               <span className="product-price">₹{Number(activePrice).toLocaleString('en-IN')}</span>
               <span className="product-original-price">₹{Number(originalPrice).toLocaleString('en-IN')}</span>
             </div>
+          </div>
 
+          {/* Dual Action Buttons: Add to Cart & Buy Now */}
+          <div className="product-card-cta-group">
             <button
               type="button"
               onClick={handleQuickAdd}
               disabled={!inStock || adding}
-              className={`btn-quick-add ${added ? 'btn-added' : ''}`}
+              className={`btn-card-add-cart ${added ? 'btn-added' : ''}`}
               title={inStock ? 'Add to cart' : 'Out of stock'}
             >
               {added ? (
                 <>
-                  <Check size={16} />
+                  <Check size={15} />
                   <span>Added</span>
                 </>
               ) : (
                 <>
-                  <ShoppingCart size={16} />
-                  <span>{adding ? 'Adding...' : 'Add'}</span>
+                  <ShoppingCart size={15} />
+                  <span>{adding ? 'Adding...' : 'Add to Cart'}</span>
                 </>
               )}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              disabled={!inStock || adding}
+              className="btn-card-buy-now"
+              title={inStock ? 'Buy Now' : 'Out of stock'}
+            >
+              <span>Buy Now</span>
             </button>
           </div>
         </div>

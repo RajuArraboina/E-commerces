@@ -4,15 +4,8 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
-// Route imports
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const productRoutes = require('./routes/productRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-const cartRoutes = require('./routes/cartRoutes');
-const orderRoutes = require('./routes/orderRoutes');
-const aiRoutes = require('./routes/aiRoutes');
+// Centralized API Routes
+const apiRoutes = require('./routes');
 
 // Swagger documentation
 const swaggerUi = require('swagger-ui-express');
@@ -48,7 +41,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 /**
- * Total HTTP Links Catalog in ShopSphere API
+ * Total HTTP Links Catalog in EShop API
  */
 const TOTAL_HTTP_LINKS = {
   auth: [
@@ -107,7 +100,7 @@ const TOTAL_HTTP_LINKS = {
 app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Welcome to ShopSphere REST API',
+    message: 'Welcome to EShop REST API',
     baseUrl: `http://localhost:${process.env.PORT || 5000}`,
     documentation: `http://localhost:${process.env.PORT || 5000}/api-docs`,
     totalEndpoints: Object.values(TOTAL_HTTP_LINKS).reduce((acc, curr) => acc + curr.length, 0),
@@ -120,7 +113,7 @@ app.use(
   '/api-docs',
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, {
-    customSiteTitle: 'ShopSphere API Documentation',
+    customSiteTitle: 'EShop API Documentation',
     customCss: '.swagger-ui .topbar { display: block; }',
     swaggerOptions: {
       persistAuthorization: true,
@@ -136,15 +129,8 @@ app.get('/api-docs.json', (req, res) => {
   res.send(swaggerDocument);
 });
 
-// Mount Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/ai', aiRoutes);
+// Mount Centralized API Routes
+app.use('/api', apiRoutes);
 
 // Error Handling Middlewares
 app.use(notFound);
@@ -154,7 +140,7 @@ const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
   console.log(
-    `[ShopSphere Server] Running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
+    `[EShop Server] Running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
   );
 });
 

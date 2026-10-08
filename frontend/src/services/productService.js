@@ -36,6 +36,28 @@ export const productService = {
     const response = await api.delete(`/products/${id}`);
     return response.data;
   },
+
+  // Dynamic homepage helper queries
+  getTrending: async (limit = 8) => {
+    return productService.getProducts({ limit, sort: '-rating' });
+  },
+
+  getNewArrivals: async (limit = 8) => {
+    return productService.getProducts({ limit, sort: 'newest' });
+  },
+
+  getFlashSale: async (limit = 6) => {
+    return productService.getProducts({ limit, sort: '-rating' });
+  },
+
+  getBestSellers: async (limit = 8) => {
+    return productService.getProducts({ limit, sort: '-rating' });
+  },
+
+  searchSuggestions: async (query, limit = 5) => {
+    if (!query || !query.trim()) return { success: true, data: [] };
+    return productService.getProducts({ search: query.trim(), limit });
+  },
 };
 
 export default productService;

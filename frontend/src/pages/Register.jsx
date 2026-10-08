@@ -258,7 +258,7 @@ const Register = () => {
                 <ShoppingBag size={32} />
               </Link>
               <h2>Create Your Account</h2>
-              <p>Join ShopSphere for seamless shopping and exclusive rewards</p>
+              <p>Join EShop for seamless shopping and exclusive rewards</p>
             </div>
 
             {error && <ErrorMessage message={error} />}

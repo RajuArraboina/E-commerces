@@ -272,7 +272,7 @@ const Login = () => {
                 <ShoppingBag size={32} />
               </Link>
               <h2>Welcome Back</h2>
-              <p>Sign in to your ShopSphere account</p>
+              <p>Sign in to your EShop account</p>
             </div>
 
             {successMsg && (

@@ -1,6 +1,6 @@
 {
-  "short_name": "ShopSphere",
-  "name": "ShopSphere E-Commerce",
+  "short_name": "EShop",
+  "name": "EShop E-Commerce",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

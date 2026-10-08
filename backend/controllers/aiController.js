@@ -188,7 +188,7 @@ const aiChat = async (req, res, next) => {
       const matched = allProducts.filter((p) => cleanMsg.includes(p.name.toLowerCase()) || cleanMsg.includes(p.brand.toLowerCase()));
       if (matched.length >= 2) {
         recommendedProducts = matched.slice(0, 2);
-        reply = `Here is a side-by-side comparison between **${matched[0].name}** (₹${matched[0].price.toLocaleString('en-IN')}, ⭐${matched[0].rating}) and **${matched[1].name}** (₹${matched[1].price.toLocaleString('en-IN')}, ⭐${matched[1].rating}):\n\n• **${matched[0].name}** excels in ${matched[0].brand} craftsmanship and user rating.\n• **${matched[1].name}** provides a great price-to-performance alternative with ${matched[1].stock > 0 ? 'immediate stock availability' : 'limited availability'}.\n\nBoth products are backed by ShopSphere warranty and fast delivery.`;
+        reply = `Here is a side-by-side comparison between **${matched[0].name}** (₹${matched[0].price.toLocaleString('en-IN')}, ⭐${matched[0].rating}) and **${matched[1].name}** (₹${matched[1].price.toLocaleString('en-IN')}, ⭐${matched[1].rating}):\n\n• **${matched[0].name}** excels in ${matched[0].brand} craftsmanship and user rating.\n• **${matched[1].name}** provides a great price-to-performance alternative with ${matched[1].stock > 0 ? 'immediate stock availability' : 'limited availability'}.\n\nBoth products are backed by EShop warranty and fast delivery.`;
       } else {
         recommendedProducts = allProducts.slice(0, 2);
         reply = `I can help compare any products in our store. Here are two of our top-rated products you can compare right now:`;
@@ -493,7 +493,7 @@ const aiGenerateDescription = async (req, res, next) => {
 Key Highlights:
 ${specsBullets}
 
-Whether for daily productivity, casual enjoyment, or professional use, the ${name} delivers an uncompromising experience backed by ShopSphere's verified quality guarantee.`;
+Whether for daily productivity, casual enjoyment, or professional use, the ${name} delivers an uncompromising experience backed by EShop's verified quality guarantee.`;
 
     res.status(200).json({
       success: true,
@@ -578,10 +578,10 @@ const aiAdminChat = async (req, res, next) => {
         reply = `Order volume is currently building up. As more customers checkout, real-time top sellers will be ranked here.`;
       }
     } else if (cleanMsg.includes('category') || cleanMsg.includes('categories')) {
-      reply = `ShopSphere has **${categories.length} active product categories** encompassing **${products.length} catalog items**. Electronics and Fashion represent the highest volume of consumer interest.`;
+      reply = `EShop has **${categories.length} active product categories** encompassing **${products.length} catalog items**. Electronics and Fashion represent the highest volume of consumer interest.`;
       metricCard = { title: 'Total Categories', value: categories.length, status: 'info' };
     } else if (cleanMsg.includes('customer') || cleanMsg.includes('users')) {
-      reply = `ShopSphere has **${totalUsers} registered customer accounts**. Customer retention and repeat purchase rate is tracked live in the User Management and Analytics panels.`;
+      reply = `EShop has **${totalUsers} registered customer accounts**. Customer retention and repeat purchase rate is tracked live in the User Management and Analytics panels.`;
       metricCard = { title: 'Total Customers', value: totalUsers, status: 'info' };
     } else {
       reply = `Here is a summary of your store's live performance:\n\n• **Revenue**: ₹${totalRevenue.toLocaleString('en-IN')}\n• **Total Orders**: ${totalOrders} (${pendingOrders} pending, ${deliveredOrders} delivered)\n• **Catalog**: ${products.length} products across ${categories.length} categories\n• **Low Stock Alert**: ${lowStockProducts.length} item${lowStockProducts.length === 1 ? '' : 's'}\n\nAsk me specific questions like *"Which products have low stock?"* or *"What is our total revenue?"* anytime!`;

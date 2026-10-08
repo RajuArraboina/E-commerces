@@ -10,8 +10,8 @@ import {
 
 const AdminSettings = () => {
   const [storeSettings, setStoreSettings] = useState({
-    storeName: 'ShopSphere Smart Commerce',
-    supportEmail: 'support@shopsphere.com',
+    storeName: 'EShop Smart Commerce',
+    supportEmail: 'support@eshop.com',
     currency: 'INR (₹)',
     taxRate: '18',
     lowStockThreshold: '10',
@@ -52,7 +52,7 @@ const AdminSettings = () => {
         <div>
           <h1 className="admin-title">System & Store Settings</h1>
           <p className="admin-subtitle">
-            Configure ShopSphere commerce parameters, AI engine settings, and alert thresholds
+            Configure EShop commerce parameters, AI engine settings, and alert thresholds
           </p>
         </div>
       </div>
@@ -154,7 +154,7 @@ const AdminSettings = () => {
                   style={{ marginTop: '3px' }}
                 />
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>✨ Ask ShopSphere AI Assistant</div>
+                  <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>✨ Ask EShop AI Assistant</div>
                   <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                     Floats concierge on storefront answering catalog questions grounded directly on MongoDB
                   </div>

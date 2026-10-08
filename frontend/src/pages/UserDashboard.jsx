@@ -293,7 +293,7 @@ const UserDashboard = () => {
             <div className="notification-item">
               <CheckCircle size={18} className="text-success" />
               <div>
-                <strong>Welcome to ShopSphere AI Commerce!</strong>
+                <strong>Welcome to EShop AI Commerce!</strong>
                 <p className="text-muted text-sm">Experience natural language product search and instant shopping assistant support.</p>
               </div>
             </div>

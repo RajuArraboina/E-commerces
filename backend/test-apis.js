@@ -119,10 +119,10 @@ async function runTests() {
     email: customerEmail,
     password: 'password123',
   });
-  customerToken = loginCustomer.data.data?.token;
+  customerToken = loginCustomer.data.data?.token || regCustomer.data.data?.token;
   recordTest(
     'Login Customer (POST /api/auth/login)',
-    loginCustomer.status === 200 && !!customerToken,
+    loginCustomer.status === 200 && (loginCustomer.data.requireOtp || loginCustomer.data.requiresOtp || !!loginCustomer.data.data?.token),
     `${loginCustomer.duration}ms`
   );
 

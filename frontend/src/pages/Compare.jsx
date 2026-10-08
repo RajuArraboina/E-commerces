@@ -103,7 +103,7 @@ const Compare = () => {
           </div>
           <h1 className="admin-title">Side-by-Side Product Comparison</h1>
           <p className="admin-subtitle">
-            Evaluate key technical specifications, pricing, and customer ratings backed by ShopSphere AI analysis
+            Evaluate key technical specifications, pricing, and customer ratings backed by EShop AI analysis
           </p>
         </div>
       </div>
@@ -155,7 +155,7 @@ const Compare = () => {
           <div className="ai-summary-header">
             <div className="ai-badge">
               <Sparkles size={18} className="text-accent" />
-              <span>✨ ShopSphere AI Comparison Verdict</span>
+              <span>✨ EShop AI Comparison Verdict</span>
             </div>
             <span className="badge badge-success">Live Analysis Complete</span>
           </div>

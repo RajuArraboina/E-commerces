@@ -198,7 +198,7 @@ const AdminLogin = () => {
               <div className="admin-login-icon-badge">
                 <Shield size={36} className="text-primary" />
               </div>
-              <h2>ShopSphere Admin</h2>
+              <h2>EShop Admin</h2>
               <p>Administrative Control Center & Management Portal</p>
             </div>
 
@@ -264,7 +264,7 @@ const AdminLogin = () => {
               </div>
               <div style={{ marginTop: '16px', textAlign: 'center' }}>
                 <Link to="/" className="auth-link" style={{ fontSize: '0.85rem' }}>
-                  &larr; Back to ShopSphere Store
+                  &larr; Back to EShop Store
                 </Link>
               </div>
             </div>

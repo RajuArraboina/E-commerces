@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Package, Calendar, ChevronRight } from 'lucide-react';
+import { Package, Calendar, ChevronRight, Truck, ChevronDown, ChevronUp } from 'lucide-react';
+import OrderTrackerWidget from './home/OrderTrackerWidget';
 
-const OrderCard = ({ order, onCancel }) => {
+const OrderCard = ({ order, onCancel, defaultTrackOpen = false }) => {
+  const [showTracker, setShowTracker] = useState(defaultTrackOpen);
+
   if (!order) return null;
 
   const {
@@ -101,12 +104,36 @@ const OrderCard = ({ order, onCancel }) => {
             </button>
           )}
 
+          {/* Dedicated Track Order Option */}
+          <button
+            type="button"
+            onClick={() => setShowTracker((prev) => !prev)}
+            className={`btn btn-sm ${showTracker ? 'btn-primary' : 'btn-outline-primary'} track-order-btn`}
+            title="Track live delivery progress"
+          >
+            <Truck size={14} />
+            <span>{showTracker ? 'Hide Tracking' : 'Track Order'}</span>
+            {showTracker ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+          </button>
+
           <Link to={`/orders/${_id}`} className="btn btn-outline btn-sm view-details-btn">
             <span>View Details</span>
             <ChevronRight size={14} />
           </Link>
         </div>
       </div>
+
+      {/* Expandable Order Tracking Panel */}
+      {showTracker && (
+        <div className="order-card-tracking-expanded">
+          <OrderTrackerWidget
+            order={order}
+            isInline={true}
+            onClose={() => setShowTracker(false)}
+            showDetailsLink={false}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -15,7 +15,7 @@ const AdminAIAssistant = () => {
   const [messages, setMessages] = useState([
     {
       sender: 'ai',
-      text: 'Welcome to **ShopSphere Admin AI Intelligence**. I have direct access to your real-time MongoDB database (Orders, Products, Users, Revenue). What operational insights can I compile for you?',
+      text: 'Welcome to **EShop Admin AI Intelligence**. I have direct access to your real-time MongoDB database (Orders, Products, Users, Revenue). What operational insights can I compile for you?',
       metricCard: null,
     },
   ]);
@@ -72,7 +72,7 @@ const AdminAIAssistant = () => {
           <div className="badge-tag badge-tag-ai" style={{ marginBottom: '8px' }}>
             <Sparkles size={14} /> ✨ Enterprise Admin Intelligence
           </div>
-          <h1 className="admin-title">ShopSphere Admin AI Assistant</h1>
+          <h1 className="admin-title">EShop Admin AI Assistant</h1>
           <p className="admin-subtitle">
             Query your operational database in natural language for instant metrics, inventory warnings, and revenue trends
           </p>

@@ -49,7 +49,7 @@ const sendEmail = async ({ to, subject, html, text }) => {
   try {
     const transporter = createTransporter();
     const mailOptions = {
-      from: process.env.EMAIL_FROM || `"ShopSphere" <${process.env.SMTP_USER}>`,
+      from: process.env.EMAIL_FROM || `"EShop" <${process.env.SMTP_USER}>`,
       to,
       subject,
       text: text || '',
@@ -69,7 +69,7 @@ const sendEmail = async ({ to, subject, html, text }) => {
  * 1. Send Welcome Email upon User Registration
  */
 const sendWelcomeEmail = async (user) => {
-  const subject = `Welcome to ShopSphere, ${user.name}! 🛍️`;
+  const subject = `Welcome to EShop, ${user.name}! 🛍️`;
   const html = `
     <!DOCTYPE html>
     <html>
@@ -91,14 +91,14 @@ const sendWelcomeEmail = async (user) => {
     <body>
       <div class="card">
         <div class="header">
-          <h1>ShopSphere</h1>
+          <h1>EShop</h1>
           <p>Your premier destination for smart shopping</p>
         </div>
         <div class="body">
-          <h2 style="margin-top: 0; color: #1e293b;">Hi ${user.name},</h2>
-          <p>Thank you for joining <strong>ShopSphere</strong>! We are delighted to have you as part of our shopping community.</p>
+          <h2 style="margin-top: 0; color: rgba(67, 17, 220, 1);">Hi ${user.name},</h2>
+          <p>Thank you for joining <strong>EShop</strong>! We are delighted to have you as part of our shopping community.</p>
           <p>Here is your registered account information:</p>
-          <ul style="color: #475569; padding-left: 20px;">
+          <ul style="color: #3e8d96ff; padding-left: 20px;">
             <li><strong>Email:</strong> ${user.email}</li>
             <li><strong>Account Role:</strong> ${user.role || 'customer'}</li>
             <li><strong>Joined:</strong> ${new Date().toLocaleDateString()}</li>
@@ -115,7 +115,7 @@ const sendWelcomeEmail = async (user) => {
           </div>
         </div>
         <div class="footer">
-          &copy; ${new Date().getFullYear()} ShopSphere. All rights reserved.<br>
+          &copy; ${new Date().getFullYear()} EShop. All rights reserved.<br>
           Sent with ❤️ from Raju Arraboina
         </div>
       </div>
@@ -130,7 +130,7 @@ const sendWelcomeEmail = async (user) => {
  * 2. Send Password Reset Alert Email
  */
 const sendPasswordResetEmail = async (user) => {
-  const subject = '🔒 ShopSphere - Password Reset Confirmation';
+  const subject = '🔒 EShop - Password Reset Confirmation';
   const html = `
     <!DOCTYPE html>
     <html>
@@ -148,19 +148,19 @@ const sendPasswordResetEmail = async (user) => {
     <body>
       <div class="card">
         <div class="header">
-          <h1 style="margin:0; font-size: 24px;">ShopSphere Security Alert</h1>
+          <h1 style="margin:0; font-size: 24px;">EShop Security Alert</h1>
         </div>
         <div class="body">
           <h2 style="margin-top: 0; color: #1e293b;">Hello ${user.name},</h2>
           <div class="alert-box">
-            ✅ Your ShopSphere account password has been successfully updated.
+            ✅ Your EShop account password has been successfully updated.
           </div>
           <p>This action was performed on <strong>${new Date().toLocaleString()}</strong>.</p>
           <p>If you made this change, you can safely disregard this email and log in with your new password.</p>
           <p style="color: #ef4444; font-size: 14px;"><strong>Warning:</strong> If you did not authorize this change, please contact support immediately to secure your account.</p>
         </div>
         <div class="footer">
-          &copy; ${new Date().getFullYear()} ShopSphere Security Team
+          &copy; ${new Date().getFullYear()} EShop Security Team
         </div>
       </div>
     </body>
@@ -175,7 +175,7 @@ const sendPasswordResetEmail = async (user) => {
  */
 const sendOrderConfirmationEmail = async (order, user) => {
   const subject = `Order Confirmed! #${order._id.toString().slice(-8).toUpperCase()} 📦`;
-  
+
   const itemsHtml = order.items
     .map(
       (item) => `
@@ -212,7 +212,7 @@ const sendOrderConfirmationEmail = async (order, user) => {
       <div class="card">
         <div class="header">
           <h1 style="margin: 0; font-size: 26px;">Order Confirmed!</h1>
-          <p style="margin: 6px 0 0; opacity: 0.95;">Thank you for your purchase with ShopSphere</p>
+          <p style="margin: 6px 0 0; opacity: 0.95;">Thank you for your purchase with EShop</p>
         </div>
         <div class="body">
           <h2 style="margin-top: 0; color: #1e293b;">Hi ${user.name || 'Valued Customer'},</h2>
@@ -244,7 +244,7 @@ const sendOrderConfirmationEmail = async (order, user) => {
           </div>
         </div>
         <div class="footer">
-          &copy; ${new Date().getFullYear()} ShopSphere. If you have questions, reply to this email!
+          &copy; ${new Date().getFullYear()} EShop. If you have questions, reply to this email!
         </div>
       </div>
     </body>
@@ -299,10 +299,10 @@ const sendOrderStatusEmail = async (order, user, newStatus) => {
           </div>
           <p><strong>Total Amount:</strong> ₹${Number(order.totalAmount).toFixed(2)}</p>
           <p><strong>Items:</strong> ${order.items.length} item(s)</p>
-          <p>Thank you for choosing ShopSphere. We are working hard to deliver the best shopping experience to you!</p>
+          <p>Thank you for choosing EShop. We are working hard to deliver the best shopping experience to you!</p>
         </div>
         <div class="footer">
-          &copy; ${new Date().getFullYear()} ShopSphere Customer Care
+          &copy; ${new Date().getFullYear()} EShop Customer Care
         </div>
       </div>
     </body>
@@ -316,7 +316,7 @@ const sendOrderStatusEmail = async (order, user, newStatus) => {
  * 5. Send 6-Digit OTP Email for Signup Verification
  */
 const sendOtpEmail = async (email, otp, name = 'there') => {
-  const subject = `Your ShopSphere Verification Code: ${otp} 🔐`;
+  const subject = `Your EShop Verification Code: ${otp} 🔐`;
   const html = `
     <!DOCTYPE html>
     <html>
@@ -338,13 +338,13 @@ const sendOtpEmail = async (email, otp, name = 'there') => {
     <body>
       <div class="card">
         <div class="header">
-          <h1>ShopSphere</h1>
+          <h1>EShop</h1>
           <p>Email Verification</p>
         </div>
         <div class="body">
           <h2 style="margin-top: 0; color: #1e293b;">Hello ${name},</h2>
           <p style="color: #475569; font-size: 15px; margin-bottom: 8px;">
-            Thank you for creating an account on ShopSphere! Use the 6-digit verification code below to verify your email address:
+            Thank you for creating an account on EShop! Use the 6-digit verification code below to verify your email address:
           </p>
           
           <div class="otp-container">
@@ -360,7 +360,7 @@ const sendOtpEmail = async (email, otp, name = 'there') => {
           </p>
         </div>
         <div class="footer">
-          &copy; ${new Date().getFullYear()} ShopSphere. Protected by Google SMTP.
+          &copy; ${new Date().getFullYear()} EShop. Protected by Google SMTP.
         </div>
       </div>
     </body>
@@ -374,7 +374,7 @@ const sendOtpEmail = async (email, otp, name = 'there') => {
  * 6. Send 6-Digit OTP Email for Login Verification (2FA)
  */
 const sendLoginOtpEmail = async (email, otp, name = 'there') => {
-  const subject = `Your ShopSphere Login Code: ${otp} 🔐`;
+  const subject = `Your EShop Login Code: ${otp} 🔐`;
   const html = `
     <!DOCTYPE html>
     <html>
@@ -396,13 +396,13 @@ const sendLoginOtpEmail = async (email, otp, name = 'there') => {
     <body>
       <div class="card">
         <div class="header">
-          <h1>ShopSphere</h1>
+          <h1>EShop</h1>
           <p>Login Verification</p>
         </div>
         <div class="body">
           <h2 style="margin-top: 0; color: #1e293b;">Hello ${name},</h2>
           <p style="color: #475569; font-size: 15px; margin-bottom: 8px;">
-            A login request was made for your ShopSphere account. Use the 6-digit verification code below to sign in:
+            A login request was made for your EShop account. Use the 6-digit verification code below to sign in:
           </p>
           
           <div class="otp-container">
@@ -418,7 +418,7 @@ const sendLoginOtpEmail = async (email, otp, name = 'there') => {
           </p>
         </div>
         <div class="footer">
-          &copy; ${new Date().getFullYear()} ShopSphere. Protected by Google SMTP.
+          &copy; ${new Date().getFullYear()} EShop. Protected by Google SMTP.
         </div>
       </div>
     </body>

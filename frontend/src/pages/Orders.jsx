@@ -2,9 +2,11 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useCart } from '../context/CartContext';
 import orderService from '../services/orderService';
 import OrderCard from '../components/OrderCard';
 import ProductCard from '../components/ProductCard';
+import OrderTrackerWidget from '../components/home/OrderTrackerWidget';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import {
@@ -26,6 +28,7 @@ import {
 const Orders = () => {
   const { user } = useAuth();
   const { wishlist, wishlistCount } = useWishlist();
+  const { cartCount } = useCart();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [orders, setOrders] = useState([]);
@@ -33,7 +36,8 @@ const Orders = () => {
   const [error, setError] = useState(null);
 
   // Filters & Search
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'orders'); // 'orders' | 'wishlist'
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'orders'); // 'orders' | 'tracking' | 'wishlist'
+  const [selectedTrackOrderId, setSelectedTrackOrderId] = useState(searchParams.get('track') || null);
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'active' | 'delivered' | 'cancelled'
   const [searchQuery, setSearchQuery] = useState('');
   const [showRewardsInfo, setShowRewardsInfo] = useState(false);
@@ -43,11 +47,20 @@ const Orders = () => {
     if (tabParam) {
       setActiveTab(tabParam);
     }
+    const trackParam = searchParams.get('track');
+    if (trackParam) {
+      setSelectedTrackOrderId(trackParam);
+    }
   }, [searchParams]);
 
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab, trackId = null) => {
     setActiveTab(tab);
-    setSearchParams(tab === 'orders' ? {} : { tab });
+    if (trackId) {
+      setSelectedTrackOrderId(trackId);
+      setSearchParams({ tab, track: trackId });
+    } else {
+      setSearchParams(tab === 'orders' ? {} : { tab });
+    }
   };
 
   const fetchOrders = async () => {
@@ -170,6 +183,20 @@ const Orders = () => {
     });
   }, [orders, statusFilter, searchQuery]);
 
+  // Tracked order for the dedicated tracking tab
+  const currentTrackingOrder = useMemo(() => {
+    if (!orders || orders.length === 0) return null;
+    if (selectedTrackOrderId) {
+      const found = orders.find((o) => o._id === selectedTrackOrderId);
+      if (found) return found;
+    }
+    return (
+      orders.find((o) =>
+        ['Placed', 'Confirmed', 'Processing', 'Shipped', 'Out for Delivery'].includes(o.orderStatus)
+      ) || orders[0]
+    );
+  }, [orders, selectedTrackOrderId]);
+
   return (
     <div className="orders-page container">
       {/* Page Header */}
@@ -180,15 +207,52 @@ const Orders = () => {
             Welcome back, <strong>{user?.name || 'Customer'}</strong>! Track live order deliveries, view receipts, and redeem reward points.
           </p>
         </div>
-        <div className="orders-header-actions">
-          <Link to="/products" className="btn btn-outline btn-sm">
-            <span>Browse Catalog</span>
-            <ArrowRight size={15} />
+        <div className="welcome-quick-chips orders-header-chips">
+          <button
+            type="button"
+            className={`welcome-chip ${activeTab === 'orders' ? 'active-chip' : ''}`}
+            onClick={() => handleTabChange('orders')}
+            title="View placed orders"
+          >
+            <Package size={16} className="text-primary" />
+            <div className="chip-text">
+              <span className="chip-label">Orders</span>
+              <strong className="chip-val">Track & View</strong>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            className={`welcome-chip ${activeTab === 'wishlist' ? 'active-chip' : ''}`}
+            onClick={() => handleTabChange('wishlist')}
+            title="View saved wishlist"
+          >
+            <Heart size={16} className="text-danger" />
+            <div className="chip-text">
+              <span className="chip-label">Wishlist</span>
+              <strong className="chip-val">{wishlistCount} Saved</strong>
+            </div>
+          </button>
+
+          <Link to="/cart" className="welcome-chip" title="View active shopping cart">
+            <ShoppingBag size={16} className="text-success" />
+            <div className="chip-text">
+              <span className="chip-label">Cart</span>
+              <strong className="chip-val">{cartCount} Items</strong>
+            </div>
+          </Link>
+
+          <Link to="/products" className="welcome-chip" title="Browse full catalog">
+            <ArrowRight size={16} className="text-accent" />
+            <div className="chip-text">
+              <span className="chip-label">Catalog</span>
+              <strong className="chip-val">Browse All</strong>
+            </div>
           </Link>
         </div>
       </div>
 
-      {/* Main Section Navigation Tabs (Orders vs Wishlist) */}
+      {/* Main Section Navigation Tabs (Orders vs Live Tracking vs Wishlist) */}
       <div className="orders-main-tabs-bar card">
         <button
           type="button"
@@ -197,6 +261,15 @@ const Orders = () => {
         >
           <Package size={17} />
           <span>Orders & Activities ({orders.length})</span>
+        </button>
+
+        <button
+          type="button"
+          className={`orders-main-tab ${activeTab === 'tracking' ? 'active' : ''}`}
+          onClick={() => handleTabChange('tracking')}
+        >
+          <Truck size={17} />
+          <span>Track Live Delivery ({stats.activeCount})</span>
         </button>
 
         <button
@@ -213,6 +286,65 @@ const Orders = () => {
 
       {loading ? (
         <Loading message="Loading your orders, activities & reward points..." />
+      ) : activeTab === 'tracking' ? (
+        /* Dedicated Live Tracking Tab View */
+        <div className="orders-tracking-tab-section">
+          {orders.length === 0 ? (
+            <div className="empty-state-box card">
+              <Truck size={48} className="empty-icon text-muted" />
+              <h3>No active orders to track</h3>
+              <p>You haven't placed any orders yet. Start exploring our catalog to place your first order.</p>
+              <Link to="/products" className="btn btn-primary" style={{ marginTop: '14px' }}>
+                Start Shopping
+              </Link>
+            </div>
+          ) : (
+            <div className="tracking-tab-content">
+              {/* Order Switcher Pills */}
+              {orders.length > 1 && (
+                <div className="tracking-switcher-card card">
+                  <div className="switcher-header-row">
+                    <span className="switcher-title">
+                      <Truck size={16} className="text-primary" />
+                      <span>Select Order to Track:</span>
+                    </span>
+                    <span className="switcher-subtitle">
+                      Tracking: <strong>Order #{currentTrackingOrder?._id?.slice(-8).toUpperCase()}</strong>
+                    </span>
+                  </div>
+
+                  <div className="switcher-pills-row">
+                    {orders.map((o) => {
+                      const isSelected = currentTrackingOrder?._id === o._id;
+                      return (
+                        <button
+                          key={o._id}
+                          type="button"
+                          className={`switcher-pill-btn ${isSelected ? 'active' : ''}`}
+                          onClick={() => setSelectedTrackOrderId(o._id)}
+                        >
+                          <span className="pill-order-id">#{o._id.slice(-8).toUpperCase()}</span>
+                          <span className={`pill-order-badge badge-${o.orderStatus.toLowerCase().replace(/\s+/g, '-')}`}>
+                            {o.orderStatus}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* The full OrderTrackerWidget for the selected order */}
+              {currentTrackingOrder && (
+                <OrderTrackerWidget
+                  order={currentTrackingOrder}
+                  isInline={false}
+                  showDetailsLink={true}
+                />
+              )}
+            </div>
+          )}
+        </div>
       ) : activeTab === 'wishlist' ? (
         /* Wishlist View */
         <div className="orders-wishlist-section">
@@ -249,14 +381,19 @@ const Orders = () => {
               </div>
             </div>
 
-            <div className="order-metric-card card">
+            <div
+              className="order-metric-card card clickable-metric"
+              onClick={() => handleTabChange('tracking')}
+              style={{ cursor: 'pointer' }}
+              title="Click to track live deliveries"
+            >
               <div className="metric-icon-wrap bg-info-soft">
                 <Truck size={22} className="text-info" />
               </div>
               <div className="metric-data">
                 <span className="metric-label">Active Deliveries</span>
                 <span className="metric-value">{stats.activeCount}</span>
-                <small className="metric-extra">In transit / processing</small>
+                <small className="metric-extra">Click to track live ↗</small>
               </div>
             </div>
 
@@ -292,7 +429,7 @@ const Orders = () => {
                 </div>
                 <div>
                   <div className="rewards-badge-row">
-                    <h3 className="rewards-heading">ShopSphere Reward Points</h3>
+                    <h3 className="rewards-heading">EShop Reward Points</h3>
                     <span className={`membership-tier-badge ${stats.badgeClass}`}>
                       <Sparkles size={13} /> {stats.tier} Member
                     </span>

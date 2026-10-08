@@ -517,19 +517,19 @@ const AdminDashboard = () => {
 
       {/* 2. Quick Actions Bar */}
       <div className="quick-actions-bar">
-        <Link to="/admin/products/add" className="quick-action-btn btn-primary-action">
+        <Link to="/admin/products/add" className="quick-action-btn btn-action-add-product">
           <Plus size={16} />
           <span>Add Product</span>
         </Link>
-        <Link to="/admin/categories" className="quick-action-btn">
+        <Link to="/admin/categories" className="quick-action-btn btn-action-category">
           <Layers size={16} />
           <span>Add Category</span>
         </Link>
-        <Link to="/admin/orders" className="quick-action-btn">
+        <Link to="/admin/orders" className="quick-action-btn btn-action-orders">
           <ClipboardList size={16} />
           <span>View Orders</span>
         </Link>
-        <Link to="/admin/inventory" className="quick-action-btn">
+        <Link to="/admin/inventory" className="quick-action-btn btn-action-inventory">
           <Archive size={16} />
           <span>Manage Inventory</span>
         </Link>
@@ -538,9 +538,9 @@ const AdminDashboard = () => {
       {/* 3. Date Filters Bar */}
       <div className="dashboard-filter-header">
         <div className="filter-group-left">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-            <Calendar size={16} className="text-primary" />
-            <span>Date Filter:</span>
+          <div className="date-filter-label-wrap">
+            <Calendar size={16} className="date-filter-icon" />
+            <span className="date-filter-title">Date Filter:</span>
           </div>
 
           <div className="date-pill-group">
@@ -587,148 +587,166 @@ const AdminDashboard = () => {
       {/* 4. 8 Dynamic Overview Cards */}
       <div className="metrics-grid">
         {/* Total Sales */}
-        <div className="metric-card card">
-          <div className="metric-icon-wrap bg-accent-soft">
-            <IndianRupee size={22} className="text-accent" />
+        <div className="metric-card card metric-card-sales">
+          <div className="metric-icon-wrap icon-sales">
+            <IndianRupee size={22} />
           </div>
           <div className="metric-data">
             <span className="metric-label">Total Sales</span>
             <span className="metric-value">
               ₹{Number(overviewMetrics.totalSales).toLocaleString('en-IN')}
             </span>
-            <small className="metric-extra">Filtered period revenue</small>
+            <small className="metric-extra">
+              <span className="metric-pill pill-sales">Filtered period revenue</span>
+            </small>
           </div>
         </div>
 
         {/* Total Orders */}
-        <div className="metric-card card">
-          <div className="metric-icon-wrap bg-warning-soft">
-            <ShoppingBag size={22} className="text-warning" />
+        <div className="metric-card card metric-card-orders">
+          <div className="metric-icon-wrap icon-orders">
+            <ShoppingBag size={22} />
           </div>
           <div className="metric-data">
             <span className="metric-label">Total Orders</span>
             <span className="metric-value">{overviewMetrics.totalOrders}</span>
-            <small className="metric-extra">{orders.length} all-time orders</small>
+            <small className="metric-extra">
+              <span className="metric-pill pill-orders">{orders.length} all-time orders</span>
+            </small>
           </div>
         </div>
 
         {/* Total Products */}
-        <div className="metric-card card">
-          <div className="metric-icon-wrap bg-success-soft">
-            <Package size={22} className="text-success" />
+        <div className="metric-card card metric-card-products">
+          <div className="metric-icon-wrap icon-products">
+            <Package size={22} />
           </div>
           <div className="metric-data">
             <span className="metric-label">Total Products</span>
             <span className="metric-value">{overviewMetrics.totalProducts}</span>
             <small className="metric-extra">
               {productAnalytics.outOfStockCount > 0 ? (
-                <span className="text-danger">{productAnalytics.outOfStockCount} out of stock</span>
+                <span className="stock-alert-pill danger">{productAnalytics.outOfStockCount} out of stock</span>
               ) : (
-                <span className="text-success">In stock catalog</span>
+                <span className="stock-alert-pill safe">In stock catalog</span>
               )}
             </small>
           </div>
         </div>
 
         {/* Total Customers */}
-        <div className="metric-card card">
-          <div className="metric-icon-wrap bg-primary-soft">
-            <Users size={22} className="text-primary" />
+        <div className="metric-card card metric-card-customers">
+          <div className="metric-icon-wrap icon-customers">
+            <Users size={22} />
           </div>
           <div className="metric-data">
             <span className="metric-label">Total Customers</span>
             <span className="metric-value">{overviewMetrics.totalCustomers}</span>
-            <small className="metric-extra">+{customerAnalytics.newCustomers} new this month</small>
+            <small className="metric-extra">
+              <span className="metric-pill pill-customers">+{customerAnalytics.newCustomers} new this month</span>
+            </small>
           </div>
         </div>
 
         {/* Total Categories */}
-        <div className="metric-card card">
-          <div className="metric-icon-wrap bg-info-soft">
-            <Layers size={22} className="text-info" />
+        <div className="metric-card card metric-card-categories">
+          <div className="metric-icon-wrap icon-categories">
+            <Layers size={22} />
           </div>
           <div className="metric-data">
             <span className="metric-label">Total Categories</span>
             <span className="metric-value">{overviewMetrics.totalCategories}</span>
-            <small className="metric-extra">Taxonomy collections</small>
+            <small className="metric-extra">
+              <span className="metric-pill pill-categories">Taxonomy collections</span>
+            </small>
           </div>
         </div>
 
         {/* Pending Orders */}
-        <div className="metric-card card">
-          <div className="metric-icon-wrap bg-warning-soft">
-            <Clock size={22} className="text-warning" />
+        <div className="metric-card card metric-card-pending">
+          <div className="metric-icon-wrap icon-pending">
+            <Clock size={22} />
           </div>
           <div className="metric-data">
             <span className="metric-label">Pending Orders</span>
             <span className="metric-value">{overviewMetrics.pendingOrders}</span>
-            <small className="metric-extra">Placed / In Processing</small>
+            <small className="metric-extra">
+              <span className="metric-pill pill-pending">Placed / In Processing</span>
+            </small>
           </div>
         </div>
 
         {/* Delivered Orders */}
-        <div className="metric-card card">
-          <div className="metric-icon-wrap bg-success-soft">
-            <CheckCircle2 size={22} className="text-success" />
+        <div className="metric-card card metric-card-delivered">
+          <div className="metric-icon-wrap icon-delivered">
+            <CheckCircle2 size={22} />
           </div>
           <div className="metric-data">
             <span className="metric-label">Delivered Orders</span>
             <span className="metric-value">{overviewMetrics.deliveredOrders}</span>
-            <small className="metric-extra">Completed fulfillment</small>
+            <small className="metric-extra">
+              <span className="metric-pill pill-delivered">Completed fulfillment</span>
+            </small>
           </div>
         </div>
 
         {/* Low Stock Products */}
-        <div className="metric-card card">
-          <div className="metric-icon-wrap bg-danger-soft">
-            <AlertTriangle size={22} className="text-danger" />
+        <div className="metric-card card metric-card-lowstock">
+          <div className="metric-icon-wrap icon-lowstock">
+            <AlertTriangle size={22} />
           </div>
           <div className="metric-data">
             <span className="metric-label">Low Stock Products</span>
             <span className="metric-value">{overviewMetrics.lowStockProducts}</span>
-            <small className="metric-extra">&le; 5 units left</small>
+            <small className="metric-extra">
+              {overviewMetrics.lowStockProducts > 0 ? (
+                <span className="stock-alert-pill warning">≤ 5 units left</span>
+              ) : (
+                <span className="stock-alert-pill safe">All items healthy</span>
+              )}
+            </small>
           </div>
         </div>
       </div>
 
       {/* 5. Sales Analytics & Interactive Revenue Trend Chart */}
-      <div className="card" style={{ marginBottom: '24px' }}>
+      <div className="card sales-analytics-card" style={{ marginBottom: '24px' }}>
         <div className="section-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <TrendingUp size={20} className="text-accent" />
-              <span>Sales Analytics & Revenue Overview</span>
+            <h3 style={{ margin: 0, fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <TrendingUp size={22} className="analytics-trending-icon text-accent" />
+              <span className="analytics-heading-text">Sales Analytics & Revenue Overview</span>
             </h3>
-            <p className="text-muted" style={{ fontSize: '0.84rem', margin: '4px 0 0' }}>
+            <p className="text-muted analytics-subtitle" style={{ fontSize: '0.85rem', margin: '4px 0 0' }}>
               Dynamic revenue trends calculated across all non-cancelled orders
             </p>
           </div>
-          <span className="badge badge-primary">Currency: INR (₹)</span>
+          <span className="badge currency-pill-badge">Currency: INR (₹)</span>
         </div>
 
         {/* Sales Submetrics: Daily, Weekly, Monthly, Yearly */}
         <div className="sales-submetrics-grid">
-          <div className="sales-submetric-card">
+          <div className="sales-submetric-card submetric-daily">
             <div className="sales-submetric-label">Daily Sales (Today)</div>
-            <div className="sales-submetric-val text-primary">
+            <div className="sales-submetric-val">
               ₹{salesAnalytics.daily.toLocaleString('en-IN')}
             </div>
           </div>
-          <div className="sales-submetric-card">
+          <div className="sales-submetric-card submetric-weekly">
             <div className="sales-submetric-label">Weekly Sales (7 Days)</div>
-            <div className="sales-submetric-val text-info">
+            <div className="sales-submetric-val">
               ₹{salesAnalytics.weekly.toLocaleString('en-IN')}
             </div>
           </div>
-          <div className="sales-submetric-card">
+          <div className="sales-submetric-card submetric-monthly">
             <div className="sales-submetric-label">Monthly Sales (30 Days)</div>
-            <div className="sales-submetric-val text-accent">
+            <div className="sales-submetric-val">
               ₹{salesAnalytics.monthly.toLocaleString('en-IN')}
             </div>
           </div>
-          <div className="sales-submetric-card">
+          <div className="sales-submetric-card submetric-yearly">
             <div className="sales-submetric-label">Yearly Sales (Current Year)</div>
-            <div className="sales-submetric-val text-success">
+            <div className="sales-submetric-val">
               ₹{salesAnalytics.yearly.toLocaleString('en-IN')}
             </div>
           </div>

@@ -4,10 +4,12 @@ import aiService from '../../services/aiService';
 import { Sparkles, X, Send, ExternalLink, Bot, User, ArrowRight } from 'lucide-react';
 
 const DEFAULT_SUGGESTIONS = [
-  'Find a phone under ₹50,000',
-  'Compare laptops for programming',
-  'Help me choose a gift under ₹3,000',
-  'Show recommended trending products',
+  'Find laptops under ₹50,000',
+  'Show me running shoes',
+  'Compare these phones',
+  'What is the best headphone?',
+  'Find products with the highest discount',
+  'Show products available for fast delivery',
 ];
 
 const AIShoppingAssistant = () => {
@@ -15,7 +17,7 @@ const AIShoppingAssistant = () => {
   const [messages, setMessages] = useState([
     {
       sender: 'ai',
-      text: 'Hello! I am **ShopSphere AI**, your intelligent shopping concierge. How can I help you discover the perfect products today?',
+      text: 'Hello! I am **EShop AI**, your intelligent shopping concierge. How can I help you discover the perfect products today?',
       products: [],
       suggestedQuestions: DEFAULT_SUGGESTIONS,
     },
@@ -80,7 +82,7 @@ const AIShoppingAssistant = () => {
         >
           <div className="ai-btn-glow" />
           <Sparkles size={20} className="ai-sparkle-spin" />
-          <span className="ai-btn-text">Ask ShopSphere AI</span>
+          <span className="ai-btn-text">Ask EShop AI</span>
         </button>
       )}
 
@@ -94,7 +96,7 @@ const AIShoppingAssistant = () => {
                 <Sparkles size={18} />
               </div>
               <div>
-                <h3 className="ai-chat-title">ShopSphere AI</h3>
+                <h3 className="ai-chat-title">EShop AI</h3>
                 <span className="ai-chat-status">
                   <span className="status-indicator-dot" /> Online • Live Catalog Grounded
                 </span>

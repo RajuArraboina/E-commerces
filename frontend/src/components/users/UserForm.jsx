@@ -168,7 +168,7 @@ const UserForm = ({
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="e.g. user@shopsphere.com"
+                placeholder="e.g. user@eshop.com"
                 className={`form-control ${validationErrors.email ? 'is-invalid' : ''}`}
                 required
               />

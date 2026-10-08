@@ -121,7 +121,7 @@ const AISearchBar = () => {
             <div className="ai-explanation-box">
               <div className="ai-explanation-title">
                 <Sparkles size={16} className="text-accent" />
-                <strong>ShopSphere AI Insight:</strong>
+                <strong>EShop AI Insight:</strong>
               </div>
               <p className="ai-explanation-text">{results.explanation}</p>
 

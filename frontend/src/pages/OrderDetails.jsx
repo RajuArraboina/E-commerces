@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import orderService from '../services/orderService';
 import OrderStatus from '../components/OrderStatus';
+import OrderTrackerWidget from '../components/home/OrderTrackerWidget';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import {
@@ -137,9 +138,8 @@ const OrderDetails = () => {
       </div>
 
       {/* Visual Tracking Stepper */}
-      <div className="tracking-section card">
-        <h3 className="section-card-title">Delivery Status Tracker</h3>
-        <OrderStatus status={orderStatus} />
+      <div className="order-details-tracker-section" style={{ marginBottom: '24px' }}>
+        <OrderTrackerWidget order={order} isInline={true} showDetailsLink={false} />
       </div>
 
       <div className="order-details-grid">

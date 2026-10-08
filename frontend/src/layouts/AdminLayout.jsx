@@ -50,7 +50,7 @@ const AdminLayout = () => {
             <div className="admin-brand">
               <Shield className="admin-brand-icon" size={24} />
               <div className="admin-brand-text">
-                <span className="brand-name">ShopSphere</span>
+                <span className="brand-name">EShop</span>
                 <span className="brand-badge">Admin</span>
               </div>
             </div>
