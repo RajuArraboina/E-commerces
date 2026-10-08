@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowRight, RefreshCw } from 'lucide-react';
+import { Sparkles, RefreshCw } from 'lucide-react';
 import ProductCard from '../ProductCard';
 import { ProductSkeleton } from './SkeletonCard';
 import { useAuth } from '../../context/AuthContext';

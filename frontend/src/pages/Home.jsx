@@ -3,8 +3,6 @@ import productService from '../services/productService';
 import categoryService from '../services/categoryService';
 import recommendationService from '../services/recommendationService';
 import brandService from '../services/brandService';
-import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
 
 // Marketplace Home Components
 import CategoryNavigation from '../components/home/CategoryNavigation';
@@ -30,9 +28,6 @@ import QuickViewModal from '../components/QuickViewModal';
 import { RefreshCw } from 'lucide-react';
 
 const Home = () => {
-  const { isAuthenticated, user } = useAuth();
-  const { appliedCoupon } = useCart();
-
   // State from live MongoDB backend
   const [categories, setCategories] = useState([]);
   const [allProducts, setAllProducts] = useState([]);

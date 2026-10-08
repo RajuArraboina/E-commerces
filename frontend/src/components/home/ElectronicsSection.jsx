@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Laptop, Cpu, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
+import { Cpu, ArrowRight } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 
 const ElectronicsSection = ({ products = [], loading = false, onQuickView }) => {

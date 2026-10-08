@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, Sparkles, Tag, Truck, Check, X } from 'lucide-react';
+import { Bell, Sparkles, Tag, Truck } from 'lucide-react';
 
 const INITIAL_NOTIFICATIONS = [
   {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, ArrowRight, Clock, RefreshCw } from 'lucide-react';
+import { Zap, ArrowRight, RefreshCw } from 'lucide-react';
 import ProductCard from '../ProductCard';
 import { ProductSkeleton } from './SkeletonCard';
 

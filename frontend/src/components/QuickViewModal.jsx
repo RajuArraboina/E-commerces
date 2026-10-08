@@ -84,7 +84,6 @@ const QuickViewModal = ({ product, isOpen, onClose }) => {
     stock = 0,
     isAvailable = true,
     variants = [],
-    specifications = [],
   } = product;
 
   const categoryName = typeof category === 'object' ? category?.name : category;

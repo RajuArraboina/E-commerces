@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Shirt, Sparkles, ArrowRight, Tag } from 'lucide-react';
+import { Shirt, Sparkles, ArrowRight } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 
 const FASHION_TABS = [

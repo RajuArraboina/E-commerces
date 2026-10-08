@@ -8,7 +8,6 @@ import {
   Scale,
   BadgePercent,
   ArrowRight,
-  Send,
 } from 'lucide-react';
 
 const AI_FEATURES = [

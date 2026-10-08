@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Heart, ArrowRight, Flower2 } from 'lucide-react';
+import { Sparkles, ArrowRight, Flower2 } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 
 const BEAUTY_PILLS = [

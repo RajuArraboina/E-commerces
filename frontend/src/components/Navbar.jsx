@@ -19,7 +19,6 @@ import {
   LayoutDashboard,
   Package,
   Layers,
-  Users,
   Archive,
   ClipboardList,
   Heart,

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import orderService from '../services/orderService';
-import OrderStatus from '../components/OrderStatus';
 import OrderTrackerWidget from '../components/home/OrderTrackerWidget';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';

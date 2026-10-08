@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, Trash2, ArrowRight } from 'lucide-react';
+import { Clock, Trash2 } from 'lucide-react';
 import ProductCard from '../ProductCard';
 
 const RecentlyViewed = ({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Sparkles,
   ArrowRight,
@@ -71,7 +71,6 @@ const FALLBACK_SLIDES = [
 ];
 
 const HeroCarousel = () => {
-  const navigate = useNavigate();
   const { appliedCoupon, applyCoupon } = useCart();
   const [slides, setSlides] = useState(FALLBACK_SLIDES);
   const [currentSlide, setCurrentSlide] = useState(0);

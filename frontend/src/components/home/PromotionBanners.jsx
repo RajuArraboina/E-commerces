@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Tag, Percent, Sparkles } from 'lucide-react';
+import { ArrowRight, Tag, Percent } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 
 const DEFAULT_BANNERS = [

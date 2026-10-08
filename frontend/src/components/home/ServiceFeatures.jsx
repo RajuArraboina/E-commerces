@@ -1,5 +1,5 @@
 import React from 'react';
-import { Truck, ShieldCheck, RotateCcw, Headphones, Sparkles } from 'lucide-react';
+import { Truck, ShieldCheck, RotateCcw, Headphones } from 'lucide-react';
 
 const DEFAULT_FEATURES = [
   {

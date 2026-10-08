@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Award, ChevronLeft, ChevronRight, Search, ArrowRight } from 'lucide-react';
+import { Award, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 
 const BrandSection = ({ brands = [] }) => {
   const [searchQuery, setSearchQuery] = useState('');

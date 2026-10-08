@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Award, ArrowRight, RefreshCw, TrendingUp } from 'lucide-react';
+import { Award, ArrowRight, RefreshCw } from 'lucide-react';
 import ProductCard from '../ProductCard';
 import { ProductSkeleton } from './SkeletonCard';
 

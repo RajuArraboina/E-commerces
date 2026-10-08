@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Package,
   Truck,
   CheckCircle2,
-  Clock,
   ArrowRight,
   MapPin,
   CreditCard,
   ShoppingBag,
-  ExternalLink,
   XCircle,
   X,
 } from 'lucide-react';
@@ -61,7 +58,6 @@ const OrderTrackerWidget = ({
 }) => {
   const { isAuthenticated } = useAuth();
   const [fetchedOrder, setFetchedOrder] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (propOrder) return;
@@ -72,7 +68,6 @@ const OrderTrackerWidget = ({
 
     const fetchLatestOrder = async () => {
       try {
-        setLoading(true);
         const res = await orderService.getMyOrders();
         if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
           const sorted = [...res.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -81,8 +76,6 @@ const OrderTrackerWidget = ({
         }
       } catch (err) {
         setFetchedOrder(null);
-      } finally {
-        setLoading(false);
       }
     };
 

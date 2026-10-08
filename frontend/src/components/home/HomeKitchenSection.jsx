@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Home as HomeIcon, ArrowRight, ShieldCheck, Lamp } from 'lucide-react';
+import { Home as HomeIcon, ArrowRight, Lamp } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 
 const HOME_PILLS = [
