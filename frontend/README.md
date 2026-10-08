@@ -31,8 +31,8 @@ Built with React, React Router DOM, Axios, Context API, and modern Vanilla CSS.
 ### 1. Environment Variables (`.env`)
 
 ```env
-REACT_APP_API_URL=http://localhost:5000/api
-VITE_API_URL=http://localhost:5000/api
+REACT_APP_API_URL=https://e-commerces-production.up.railway.app/api
+VITE_API_URL=https://e-commerces-production.up.railway.app/api
 ```
 
 ### 2. Install Dependencies
