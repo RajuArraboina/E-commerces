@@ -1,3 +1,10 @@
+// Ensure global crypto is defined across all Node.js runtime environments (for MongoDB/Mongoose drivers)
+if (typeof globalThis.crypto === 'undefined' || typeof global.crypto === 'undefined') {
+  const nodeCrypto = require('crypto');
+  global.crypto = nodeCrypto;
+  globalThis.crypto = nodeCrypto;
+}
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
