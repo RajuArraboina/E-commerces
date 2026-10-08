@@ -277,18 +277,17 @@ const Home = () => {
       )}
 
       {/* =========================================================================
-          1 & 2. CATEGORY NAVIGATION STRIP
-          Marketplace horizontal category strip immediately below header with icons,
-          labels, hover animations & "View All"
-         ========================================================================= */}
-      <CategoryNavigation categories={categories} loading={loading} />
-
-      {/* =========================================================================
-          3. HERO BANNER CAROUSEL
+          1. HERO BANNER CAROUSEL
           Large marketplace promotional carousel with dynamic backend banners,
           countdown clock, coupon codes & CTAs
          ========================================================================= */}
       <HeroCarousel />
+
+      {/* =========================================================================
+          2. CATEGORY NAVIGATION STRIP
+          Marketplace horizontal category strip with icons, labels, hover animations & "View All"
+         ========================================================================= */}
+      <CategoryNavigation categories={categories} loading={loading} />
 
       {/* =========================================================================
           4. QUICK SERVICE STRIP

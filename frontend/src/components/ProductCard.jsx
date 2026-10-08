@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, ShoppingCart, Check, Heart, Eye } from 'lucide-react';
+import { Star, ShoppingCart, Check, Heart, Eye, RotateCcw, Truck, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -26,8 +26,10 @@ const ProductCard = ({ product, onQuickView }) => {
   const { isAuthenticated } = useAuth();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const navigate = useNavigate();
+
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   // Active variant state (for color switching & prices)
   const [selectedVariant, setSelectedVariant] = useState(() => {
@@ -43,6 +45,7 @@ const ProductCard = ({ product, onQuickView }) => {
     brand,
     category,
     image,
+    description,
     rating = 0,
     numReviews = 0,
     stock = 0,
@@ -61,6 +64,17 @@ const ProductCard = ({ product, onQuickView }) => {
   // Calculate realistic original price and discount percentage
   const originalPrice = product.originalPrice || Math.round(activePrice * 1.25);
   const discountPercent = Math.max(10, Math.round(((originalPrice - activePrice) / originalPrice) * 100));
+
+  const handleCardTap = () => {
+    // Allows tapping the card background to flip on touch/mobile
+    setIsFlipped((prev) => !prev);
+  };
+
+  const handleFlipToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsFlipped((prev) => !prev);
+  };
 
   const handleQuickAdd = async (e) => {
     e.preventDefault();
@@ -101,28 +115,6 @@ const ProductCard = ({ product, onQuickView }) => {
     }
   };
 
-  const handleBuyNow = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!isAuthenticated) {
-      navigate('/login?redirect=/checkout');
-      return;
-    }
-
-    if (!inStock) return;
-
-    try {
-      setAdding(true);
-      await addToCart(_id, selectedVariant?._id || null, 1);
-      navigate('/checkout');
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to proceed to checkout');
-    } finally {
-      setAdding(false);
-    }
-  };
-
   // Determine dynamic badge
   const getDynamicBadge = () => {
     if (product.badge) return product.badge;
@@ -138,164 +130,291 @@ const ProductCard = ({ product, onQuickView }) => {
   const dynamicBadge = getDynamicBadge();
 
   return (
-    <div className="product-card card">
-      <Link to={`/products/${_id}`} className="product-card-link">
-        {/* Thumbnail Image & Quick Overlays */}
-        <div className="product-image-wrap">
-          <img
-            src={activeImage}
-            alt={name}
-            className="product-image"
-            loading="lazy"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';
-            }}
-          />
+    <div
+      className={`flip-card ${isFlipped ? 'is-flipped' : ''}`}
+      onClick={handleCardTap}
+      tabIndex={0}
+      role="region"
+      aria-label={`Product card for ${name}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target === e.currentTarget) {
+            e.preventDefault();
+            setIsFlipped((prev) => !prev);
+          }
+        }
+      }}
+    >
+      <div className="flip-card-inner">
+        {/* =========================================================
+            FRONT SIDE OF FLIPCARD
+            Card image, Product name, Rating, Price, Discount, Wishlist
+           ========================================================= */}
+        <div className="flip-card-front card">
+          {/* Thumbnail Image & Floating Badges */}
+          <div className="product-image-wrap">
+            <img
+              src={activeImage}
+              alt={name}
+              className="product-image"
+              loading="lazy"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';
+              }}
+            />
 
-          {/* Badges on Image */}
-          <div className="card-floating-badges">
-            {dynamicBadge && (
-              <span className={`product-status-badge badge-${dynamicBadge.toLowerCase().replace(/\s+/g, '-')}`}>
-                {dynamicBadge}
-              </span>
-            )}
-            {discountPercent > 0 && inStock && (
-              <span className="product-card-discount-badge">{discountPercent}% OFF</span>
-            )}
+            {/* Floating Badges */}
+            <div className="card-floating-badges">
+              {dynamicBadge && (
+                <span className={`product-status-badge badge-${dynamicBadge.toLowerCase().replace(/\s+/g, '-')}`}>
+                  {dynamicBadge}
+                </span>
+              )}
+              {discountPercent > 0 && inStock && (
+                <span className="product-card-discount-badge">{discountPercent}% OFF</span>
+              )}
+            </div>
+
+            {!inStock && <span className="badge-out-of-stock">Out of Stock</span>}
+
+            {/* Top Floating Action Buttons: Wishlist & Quick View */}
+            <div className="card-top-actions">
+              <button
+                type="button"
+                className={`card-action-btn ${isWishlisted ? 'active' : ''}`}
+                onClick={handleWishlistClick}
+                title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                aria-label="Wishlist"
+              >
+                <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} />
+              </button>
+              <button
+                type="button"
+                className="card-action-btn"
+                onClick={handleQuickViewClick}
+                title="Quick View"
+                aria-label="Quick View"
+              >
+                <Eye size={16} />
+              </button>
+            </div>
+
+            {/* Quick Flip Button Badge */}
+            <button
+              type="button"
+              className="card-flip-btn"
+              onClick={handleFlipToggle}
+              title="Tap to Flip for Specs & Description"
+              aria-label="Flip card for details"
+            >
+              <RotateCcw size={13} />
+              <span>Specs</span>
+            </button>
           </div>
 
-          {!inStock && <span className="badge-out-of-stock">Out of Stock</span>}
+          {/* Front Body */}
+          <div className="product-card-body">
+            <div className="product-meta-row">
+              <span className="product-brand">{brand}</span>
+              {categoryName && <span className="product-category-tag">{categoryName}</span>}
+            </div>
 
-          {/* Top Floating Action Buttons: Wishlist & Quick View */}
-          <div className="card-top-actions">
-            <button
-              type="button"
-              className={`card-action-btn ${isWishlisted ? 'active' : ''}`}
-              onClick={handleWishlistClick}
-              title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-              aria-label="Wishlist"
+            <Link
+              to={`/products/${_id}`}
+              className="product-title-link"
+              onClick={(e) => e.stopPropagation()}
             >
-              <Heart size={16} fill={isWishlisted ? 'currentColor' : 'none'} />
-            </button>
-            <button
-              type="button"
-              className="card-action-btn"
-              onClick={handleQuickViewClick}
-              title="Quick View"
-              aria-label="Quick View"
-            >
-              <Eye size={16} />
-            </button>
+              <h3 className="product-title" title={name}>
+                {name}
+              </h3>
+            </Link>
+
+            {/* Rating & Stock */}
+            <div className="product-rating">
+              <div className="stars-wrap">
+                <Star size={14} className="star-filled" />
+                <span>{rating ? rating.toFixed(1) : '4.5'}</span>
+                {numReviews > 0 && <span className="text-muted text-xs">({numReviews})</span>}
+              </div>
+              <span className="stock-info">
+                {inStock ? (
+                  stock <= 8 ? (
+                    <span className="text-warning-bold">Only {stock} left</span>
+                  ) : (
+                    <span className="text-success">In Stock</span>
+                  )
+                ) : (
+                  <span className="text-danger">Sold Out</span>
+                )}
+              </span>
+            </div>
+
+            {/* Color Swatches if available */}
+            {variants && variants.length > 1 && variants.some((v) => v.color) && (
+              <div className="product-color-options">
+                <div className="color-swatches-row">
+                  {variants.slice(0, 5).map((v, i) => {
+                    const isCurActive =
+                      (selectedVariant?._id && selectedVariant._id === v._id) ||
+                      (selectedVariant?.sku && selectedVariant.sku === v.sku) ||
+                      (!selectedVariant && i === 0);
+                    return (
+                      <button
+                        key={v._id || v.sku || i}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setSelectedVariant(v);
+                        }}
+                        onMouseEnter={() => setSelectedVariant(v)}
+                        className={`card-color-swatch ${isCurActive ? 'active' : ''}`}
+                        title={v.color || v.title}
+                        style={{ backgroundColor: getColorCode(v.color) }}
+                        aria-label={v.color || v.title}
+                      />
+                    );
+                  })}
+                </div>
+                <span className="color-label-preview">
+                  {selectedVariant?.color || `${variants.length} colors`}
+                </span>
+              </div>
+            )}
+
+            {/* Price with Original Price */}
+            <div className="product-price-row">
+              <div className="product-price-stack">
+                <span className="product-price">₹{Number(activePrice).toLocaleString('en-IN')}</span>
+                <span className="product-original-price">₹{Number(originalPrice).toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+
+            {/* Actions: Add to Cart & Tap for Details */}
+            <div className="product-card-cta-group">
+              <button
+                type="button"
+                onClick={handleQuickAdd}
+                disabled={!inStock || adding}
+                className={`btn-card-add-cart ${added ? 'btn-added' : ''}`}
+                title={inStock ? 'Add to cart' : 'Out of stock'}
+              >
+                {added ? (
+                  <>
+                    <Check size={14} />
+                    <span>Added</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart size={14} />
+                    <span>{adding ? 'Adding...' : 'Add to Cart'}</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleFlipToggle}
+                className="btn-flip-trigger"
+                title="Tap to Flip for Details"
+              >
+                <RotateCcw size={14} />
+                <span>Details</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="product-card-body">
-          <div className="product-meta-row">
-            <span className="product-brand">{brand}</span>
-            {categoryName && <span className="product-category-tag">{categoryName}</span>}
-          </div>
-
-          <h3 className="product-title" title={name}>
-            {name}
-          </h3>
-
-          {/* Rating & Stock */}
-          <div className="product-rating">
-            <div className="stars-wrap">
-              <Star size={14} className="star-filled" />
-              <span>{rating ? rating.toFixed(1) : '4.5'}</span>
-              {numReviews > 0 && <span className="text-muted text-xs">({numReviews})</span>}
+        {/* =========================================================
+            BACK SIDE OF FLIPCARD
+            Description, Brand, Stock, Delivery, Add to Cart, View Details
+           ========================================================= */}
+        <div className="flip-card-back card">
+          <div className="flip-card-back-header">
+            <div className="back-header-info">
+              <span className="back-brand">{brand}</span>
+              <h4 className="back-product-title" title={name}>{name}</h4>
             </div>
-            <span className="stock-info">
-              {inStock ? (
-                stock <= 8 ? (
-                  <span className="text-warning-bold">Only {stock} left</span>
-                ) : (
-                  <span className="text-success">In Stock</span>
-                )
-              ) : (
-                <span className="text-danger">Sold Out</span>
-              )}
-            </span>
+            <button
+              type="button"
+              onClick={handleFlipToggle}
+              className="btn-flip-back"
+              title="Flip back to front"
+              aria-label="Flip back to front"
+            >
+              <RotateCcw size={15} />
+            </button>
           </div>
 
-          {/* Color Variant Swatches */}
-          {variants && variants.length > 1 && variants.some((v) => v.color) && (
-            <div className="product-color-options">
-              <div className="color-swatches-row">
-                {variants.slice(0, 5).map((v, i) => {
-                  const isCurActive =
-                    (selectedVariant?._id && selectedVariant._id === v._id) ||
-                    (selectedVariant?.sku && selectedVariant.sku === v.sku) ||
-                    (!selectedVariant && i === 0);
-                  return (
-                    <button
-                      key={v._id || v.sku || i}
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setSelectedVariant(v);
-                      }}
-                      onMouseEnter={() => setSelectedVariant(v)}
-                      className={`card-color-swatch ${isCurActive ? 'active' : ''}`}
-                      title={v.color || v.title}
-                      style={{ backgroundColor: getColorCode(v.color) }}
-                      aria-label={v.color || v.title}
-                    />
-                  );
-                })}
+          <div className="flip-card-back-body">
+            {/* Rating & Stock */}
+            <div className="back-spec-row">
+              <div className="stars-wrap">
+                <Star size={13} className="star-filled" />
+                <span>{rating ? rating.toFixed(1) : '4.5'}</span>
+                <span className="text-muted text-xs">({numReviews || 0} reviews)</span>
               </div>
-              <span className="color-label-preview">
-                {selectedVariant?.color || `${variants.length} colors`}
+              <span className={`stock-info ${inStock ? 'text-success' : 'text-danger'}`}>
+                {inStock ? `${stock} in stock` : 'Out of stock'}
               </span>
             </div>
-          )}
 
-          {/* Price with Original Price */}
-          <div className="product-price-row">
-            <div className="product-price-stack">
+            {/* Delivery Info */}
+            <div className="back-delivery-pill">
+              <Truck size={14} className="text-primary" />
+              <span>Free Express Delivery across India</span>
+            </div>
+
+            {/* Description */}
+            <div className="back-description-box">
+              <p className="back-description-text">
+                {description ||
+                  'Authentic, factory-sealed product with 1-year brand warranty, verified customer ratings, express delivery, and hassle-free returns.'}
+              </p>
+            </div>
+
+            {/* Price Preview on Back */}
+            <div className="back-price-row">
               <span className="product-price">₹{Number(activePrice).toLocaleString('en-IN')}</span>
-              <span className="product-original-price">₹{Number(originalPrice).toLocaleString('en-IN')}</span>
+              {discountPercent > 0 && (
+                <span className="product-card-discount-badge">{discountPercent}% OFF</span>
+              )}
             </div>
           </div>
 
-          {/* Dual Action Buttons: Add to Cart & Buy Now */}
-          <div className="product-card-cta-group">
+          {/* Action Buttons on Back: Add to Cart & View Details */}
+          <div className="flip-card-back-actions">
             <button
               type="button"
               onClick={handleQuickAdd}
               disabled={!inStock || adding}
               className={`btn-card-add-cart ${added ? 'btn-added' : ''}`}
-              title={inStock ? 'Add to cart' : 'Out of stock'}
             >
               {added ? (
                 <>
-                  <Check size={15} />
+                  <Check size={14} />
                   <span>Added</span>
                 </>
               ) : (
                 <>
-                  <ShoppingCart size={15} />
+                  <ShoppingCart size={14} />
                   <span>{adding ? 'Adding...' : 'Add to Cart'}</span>
                 </>
               )}
             </button>
 
-            <button
-              type="button"
-              onClick={handleBuyNow}
-              disabled={!inStock || adding}
-              className="btn-card-buy-now"
-              title={inStock ? 'Buy Now' : 'Out of stock'}
+            <Link
+              to={`/products/${_id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="btn-card-view-details"
             >
-              <span>Buy Now</span>
-            </button>
+              <span>View Details</span>
+              <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

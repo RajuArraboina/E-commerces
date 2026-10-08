@@ -151,9 +151,9 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Global Search Bar with Live Suggestions Dropdown */}
+          {/* Global Search Bar with Live Suggestions Dropdown (Desktop) */}
           {!isAdmin ? (
-            <div className="navbar-search-wrapper" ref={searchContainerRef}>
+            <div className="navbar-search-wrapper hide-on-mobile" ref={searchContainerRef}>
               <form onSubmit={handleSearchSubmit} className="navbar-search-form">
                 <div className="search-input-inner">
                   <Search size={18} className="search-icon-left text-muted" />
@@ -212,7 +212,7 @@ const Navbar = () => {
 
           {/* Admin Navigation (Desktop) */}
           {isAdmin && (
-            <nav className="navbar-links admin-nav-links">
+            <nav className="navbar-links admin-nav-links hide-on-mobile">
               <NavLink to="/admin" end className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
                 <LayoutDashboard size={16} />
                 <span>Dashboard</span>
@@ -238,12 +238,16 @@ const Navbar = () => {
 
           {/* Right Action Icons & Auth Controls */}
           <div className="navbar-actions">
-            <ThemeToggle />
+            <div className="hide-on-mobile">
+              <ThemeToggle />
+            </div>
 
             {!isAdmin && (
               <>
                 {/* Notifications Dropdown */}
-                <NotificationDropdown />
+                <div className="hide-on-mobile">
+                  <NotificationDropdown />
+                </div>
 
                 {/* Orders Shortcut */}
                 {isAuthenticated && (
@@ -260,7 +264,7 @@ const Navbar = () => {
                 {/* Wishlist Icon */}
                 <Link
                   to={isAuthenticated ? '/orders?tab=wishlist' : '/login'}
-                  className="cart-badge-btn nav-action-btn nav-action-wishlist"
+                  className="cart-badge-btn nav-action-btn nav-action-wishlist hide-on-mobile"
                   aria-label="Wishlist"
                   title="My Wishlist"
                 >
@@ -284,7 +288,7 @@ const Navbar = () => {
 
             {/* User Account / Profile Controls */}
             {isAuthenticated ? (
-              <div className="account-dropdown-wrapper" ref={accountDropdownRef}>
+              <div className="account-dropdown-wrapper hide-on-mobile" ref={accountDropdownRef}>
                 <button
                   type="button"
                   className={`account-trigger-btn ${accountDropdownOpen ? 'active' : ''}`}
@@ -392,7 +396,7 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              <div className="guest-auth-btns">
+              <div className="guest-auth-btns hide-on-mobile">
                 <Link to="/login" className="btn btn-primary btn-sm guest-login-btn">
                   Login / Register
                 </Link>
@@ -410,9 +414,45 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Secondary Navigation Menu for Customers */}
+        {/* Dedicated Mobile Search Bar (Right Below Logo Row on Mobile) */}
         {!isAdmin && (
-          <div className="navbar-secondary-menu">
+          <div className="mobile-header-search-bar hide-on-desktop">
+            <form onSubmit={handleSearchSubmit} className="mobile-header-search-form">
+              <Search size={16} className="search-icon-left text-muted" />
+              <input
+                type="text"
+                placeholder="Search products, brands & more..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="header-search-input"
+                aria-label="Mobile product search"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="search-clear-cross"
+                  aria-label="Clear query"
+                >
+                  <X size={14} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleOpenAIChat}
+                className="search-ai-assistant-btn"
+                title="Ask EShop AI"
+                aria-label="Ask AI"
+              >
+                <Sparkles size={15} className="text-accent" />
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Secondary Navigation Menu for Customers (Desktop Only - hidden on mobile) */}
+        {!isAdmin && (
+          <div className="navbar-secondary-menu hide-on-mobile">
             <div className="navbar-secondary-container">
               <nav className="secondary-nav-links">
                 <NavLink to="/" end className={({ isActive }) => (isActive ? 'sec-nav-link active sec-nav-home' : 'sec-nav-link sec-nav-home')}>
@@ -507,12 +547,33 @@ const Navbar = () => {
                     <span>🏆 Best Sellers</span>
                     <span className="nav-micro-badge badge-bestseller">TOP</span>
                   </Link>
+                  <Link to={isAuthenticated ? '/orders?tab=wishlist' : '/login'} onClick={() => setMobileMenuOpen(false)}>
+                    <span>Saved Wishlist ({wishlistCount})</span>
+                  </Link>
                   {isAuthenticated && (
                     <Link to="/orders" onClick={() => setMobileMenuOpen(false)}>My Orders</Link>
                   )}
                   <Link to="/cart" onClick={() => setMobileMenuOpen(false)}>Shopping Cart ({cartCount})</Link>
                 </>
               )}
+
+              {/* Mobile Drawer Quick Settings (Location & Theme) */}
+              <div className="mobile-drawer-settings-row">
+                <button
+                  type="button"
+                  className="mobile-drawer-loc-btn"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setLocationModalOpen(true);
+                  }}
+                >
+                  <MapPin size={15} className="text-primary" />
+                  <span className="loc-text">Deliver: {userLocation}</span>
+                </button>
+                <div className="mobile-drawer-theme-toggle">
+                  <ThemeToggle />
+                </div>
+              </div>
 
               {isAuthenticated ? (
                 <>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Layers, Search, Heart, ShoppingCart } from 'lucide-react';
+import { Home, Layers, ShoppingCart, Package, User } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
@@ -33,25 +33,6 @@ const MobileBottomNav = () => {
       </NavLink>
 
       <NavLink
-        to="/products"
-        className={({ isActive }) => (isActive ? 'mobile-tab active' : 'mobile-tab')}
-      >
-        <Search size={20} />
-        <span>Search</span>
-      </NavLink>
-
-      <NavLink
-        to={isAuthenticated ? '/orders?tab=wishlist' : '/login'}
-        className={({ isActive }) => (isActive ? 'mobile-tab active' : 'mobile-tab')}
-      >
-        <div className="tab-icon-wrap">
-          <Heart size={20} />
-          {wishlistCount > 0 && <span className="tab-badge wishlist-tab-badge">{wishlistCount}</span>}
-        </div>
-        <span>Wishlist</span>
-      </NavLink>
-
-      <NavLink
         to="/cart"
         className={({ isActive }) => (isActive ? 'mobile-tab active' : 'mobile-tab')}
       >
@@ -60,6 +41,26 @@ const MobileBottomNav = () => {
           {cartCount > 0 && <span className="tab-badge">{cartCount}</span>}
         </div>
         <span>Cart</span>
+      </NavLink>
+
+      <NavLink
+        to={isAuthenticated ? '/orders' : '/login?redirect=/orders'}
+        className={({ isActive }) => (isActive ? 'mobile-tab active' : 'mobile-tab')}
+      >
+        <div className="tab-icon-wrap">
+          <Package size={20} />
+        </div>
+        <span>Orders</span>
+      </NavLink>
+
+      <NavLink
+        to={isAuthenticated ? '/profile' : '/login'}
+        className={({ isActive }) => (isActive ? 'mobile-tab active' : 'mobile-tab')}
+      >
+        <div className="tab-icon-wrap">
+          <User size={20} />
+        </div>
+        <span>Profile</span>
       </NavLink>
     </nav>
   );
