@@ -1,8 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+
+// Load environment variables (supports backend/.env, root .env, and cloud environment variables)
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config();
 
 // Centralized API Routes
 const apiRoutes = require('./routes');
@@ -10,9 +15,6 @@ const apiRoutes = require('./routes');
 // Swagger documentation
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./config/swagger');
-
-// Load environment variables
-dotenv.config();
 
 // Connect to MongoDB
 connectDB();

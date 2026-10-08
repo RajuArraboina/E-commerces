@@ -1,0 +1,17 @@
+{
+  "name": "eshop-monorepo",
+  "version": "1.0.0",
+  "description": "EShop Full Stack Platform",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "backend": "npm start --prefix backend",
+    "frontend": "npm start --prefix frontend",
+    "dev": "npm run dev --prefix backend",
+    "build": "npm --prefix backend install",
+    "postinstall": "npm --prefix backend install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
